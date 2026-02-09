@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 22.20.0
       - run: cd packages/d-ui
+      - run: npm install
       - run: npm build
 
   publish-npm:
