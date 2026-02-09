@@ -6,6 +6,10 @@
   "main": "./dist/d-ui.umd.cjs",
   "module": "./dist/d-ui.js",
   "types": "./dist/index.d.ts",
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  }
   "exports": {
     ".": {
       "import": {
@@ -61,3 +65,4 @@
     "vue-tsc": "^2.1.0"
   }
 }
+
