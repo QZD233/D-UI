@@ -67,9 +67,8 @@ jobs:
           corepack enable
           corepack prepare pnpm@latest --activate
 
-      # 进入特定的包目录进行发布
-      - name: Publish package
-        run: |
-          cd ${{ matrix.package-dir }}
-          pnpm publish --no-git-checks --access public
-        # 注意：这里不设置 NODE_AUTH_TOKEN，由 OIDC 自动处理认证
+      - name: Publish @d-ui/core
+        working-directory: ./packages/d-ui
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # 使用仓库密钥
+        run: pnpm publish --no-git-checks --access public
