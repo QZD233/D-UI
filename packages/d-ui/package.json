@@ -9,7 +9,7 @@
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
-  }
+  },
   "exports": {
     ".": {
       "import": {
@@ -65,4 +65,5 @@
     "vue-tsc": "^2.1.0"
   }
 }
+
 
