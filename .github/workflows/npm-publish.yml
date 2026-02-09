@@ -1,38 +1,75 @@
-# This workflow will run tests using node and then publish a package to GitHub Packages when a release is created
-# For more information see: https://docs.github.com/en/actions/publishing-packages/publishing-nodejs-packages
-
-name: Node.js Package
-
+name: Publish Package
 on:
   release:
-    types: [created] # 仅当创建 Release 时触发
+    types: [created]
   push:
     branches:
-      - main #仅当 push 到 main 分支时触发
+      - main
+
+# 关键：必须为 OIDC 认证配置权限
+permissions:
+  id-token: write # 启用 OIDC 身份验证
+  contents: read
 
 jobs:
-  build:
+  # 第一阶段：构建和测试
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
         with:
-          node-version: 22.20.0
-      - run: cd packages/d-ui
-      - run: npm install
-      - run: npm run build
+          fetch-depth: 2 # TurboRepo 可能需要 Git 历史记录
 
-  publish-npm:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22.20.0
-          registry-url: https://registry.npmjs.org/
-      # - run: npm ci
-      - run: cd dist
-      - run: npm publish
-        env:
-          NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
+
+      # 关键：启用 Corepack 以使用项目中定义的 pnpm 版本
+      - name: Enable Corepack & Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      # 安装所有工作空间的依赖（包括 apps/dev 和 packages/d-ui）
+      - name: Install dependencies with pnpm
+        run: pnpm install --frozen-lockfile
+
+      # 使用 TurboRepo 并行构建所有包，提高速度
+      - name: Build packages with Turbo
+        run: pnpm turbo run build
+
+      # 可选：运行测试
+      # - name: Run tests
+      #   run: pnpm turbo run test
+
+  # 第二阶段：发布到 npm
+  publish-npm:
+    needs: build-and-test
+    runs-on: ubuntu-latest
+    # 针对每个包单独发布，适用于 @d-ui/core 和可能的其他包
+    strategy:
+      matrix:
+        package-dir: ['packages/d-ui'] # 如果有更多包，例如 'apps/dev'，可以添加在这里
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js for publishing
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22.20.0
+          registry-url: 'https://registry.npmjs.org/'
+
+      - name: Enable Corepack & Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      # 进入特定的包目录进行发布
+      - name: Publish package
+        run: |
+          cd ${{ matrix.package-dir }}
+          pnpm publish --no-git-checks --access public
+        # 注意：这里不设置 NODE_AUTH_TOKEN，由 OIDC 自动处理认证
