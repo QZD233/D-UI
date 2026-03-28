@@ -99,4 +99,4 @@ import { HelloWorld } from "@d-ui/core";
 
 ## 组件文档
 
-- [DForm 动态表单](./packages/d-ui/docs/DForm.md) - 配置化表单组件，支持多种控件类型、响应式布局、校验与插槽自定义
+- [DForm 动态表单](./packages/d-ui/README.md) - 配置化表单组件，支持多种控件类型、响应式布局、校验与插槽自定义
