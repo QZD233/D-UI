@@ -7,8 +7,6 @@
 - **Vue 3** - 渐进式前端框架
 - **Vite** - 构建工具
 - **Element Plus** - UI 组件库
-- **Pinia** - 状态管理
-- **lodash-es** - 工具库
 - **pnpm** - 包管理器
 - **Turborepo** - Monorepo 构建编排
 
@@ -30,7 +28,7 @@ d-ui/
 ### 安装依赖
 
 ```bash
-pnpm install
+pnpm install  
 ```
 
 ### 开发

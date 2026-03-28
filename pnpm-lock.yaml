@@ -65,10 +65,6 @@ importers:
         version: 2.2.12(typescript@5.9.3)
 
   packages/d-ui:
-    dependencies:
-      lodash-es:
-        specifier: ^4.17.21
-        version: 4.17.23
     devDependencies:
       '@element-plus/icons-vue':
         specifier: ^2.3.2
@@ -79,18 +75,9 @@ importers:
       '@vitejs/plugin-vue':
         specifier: ^5.1.0
         version: 5.2.4(vite@7.2.4(jiti@2.6.1)(lightningcss@1.30.2)(sass@1.97.3))(vue@3.5.27(typescript@5.9.3))
-      '@vueuse/core':
-        specifier: ^11.2.0
-        version: 11.3.0(vue@3.5.27(typescript@5.9.3))
-      axios:
-        specifier: ^1.7.0
-        version: 1.13.4
       element-plus:
         specifier: ^2.6.0
         version: 2.13.1(vue@3.5.27(typescript@5.9.3))
-      pinia:
-        specifier: ^2.2.0
-        version: 2.3.1(typescript@5.9.3)(vue@3.5.27(typescript@5.9.3))
       rimraf:
         specifier: ^5.0.0
         version: 5.0.10

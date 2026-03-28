@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, useTemplateRef } from "vue";
+import { computed, useTemplateRef } from "vue";
 import type { FormInstance } from "element-plus";
 import { ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import {
@@ -195,338 +195,205 @@ defineExpose({
 </script>
 
 <template>
-  <el-form
-    ref="formRef"
-    :model="modelValue"
-    v-bind="formConfigFormat.formAttributes ?? {}"
-  >
+  <el-form ref="formRef" :model="modelValue" v-bind="formConfigFormat.formAttributes ?? {}">
     <!-- 栅格布局 -->
-    <el-row
-      :gutter="formConfigFormat.formAttributes.gutter"
-      :justify="formConfigFormat.formAttributes.justify"
-      :align="formConfigFormat.formAttributes.align"
-      :tag="formConfigFormat.formAttributes.tag"
-      :class="formConfigFormat.formAttributes.rowClass"
-      :style="formConfigFormat.formAttributes.rowStyle"
-    >
+    <el-row :gutter="formConfigFormat.formAttributes.gutter" :justify="formConfigFormat.formAttributes.justify"
+      :align="formConfigFormat.formAttributes.align" :tag="formConfigFormat.formAttributes.tag"
+      :class="formConfigFormat.formAttributes.rowClass" :style="formConfigFormat.formAttributes.rowStyle">
       <template v-for="(item, index) in getItemsToShow">
-        <el-col
-          v-if="isItemVisible(item)"
-          :key="item.formItemAttributes?.prop ?? `form-item-${index}`"
+        <el-col v-if="isItemVisible(item)" :key="item.formItemAttributes?.prop ?? `form-item-${index}`"
           :span="formConfigFormat.formAttributes?.span ?? item.span"
           :offset="formConfigFormat.formAttributes?.offset ?? item.offset"
           :push="formConfigFormat.formAttributes?.push ?? item.push"
           :pull="formConfigFormat.formAttributes?.pull ?? item.pull"
-          :xs="formConfigFormat.formAttributes?.xs ?? item.xs"
-          :sm="formConfigFormat.formAttributes?.sm ?? item.sm"
-          :md="formConfigFormat.formAttributes?.md ?? item.md"
-          :lg="formConfigFormat.formAttributes?.lg ?? item.lg"
-          :xl="formConfigFormat.formAttributes?.xl ?? item.xl"
-        >
+          :xs="formConfigFormat.formAttributes?.xs ?? item.xs" :sm="formConfigFormat.formAttributes?.sm ?? item.sm"
+          :md="formConfigFormat.formAttributes?.md ?? item.md" :lg="formConfigFormat.formAttributes?.lg ?? item.lg"
+          :xl="formConfigFormat.formAttributes?.xl ?? item.xl">
           <el-form-item v-bind="item.formItemAttributes">
             <!-- 头文字插槽 -->
             <template v-if="item.labelSlotName" #label="slotProps">
               <!-- 头部插槽返回全部配置项 -->
-              <slot
-                :name="item.labelSlotName"
-                v-bind="{ ...slotProps, itemConfig: item }"
-              ></slot>
+              <slot :name="item.labelSlotName" v-bind="{ ...slotProps, itemConfig: item }"></slot>
             </template>
 
             <!-- 内容插槽返回全部配置项 -->
             <slot :name="item.formItemAttributes.prop" v-bind="{ ...item }">
-              <div
-                v-if="item.edit"
-                class="w-full flex justify-start items-center"
-              >
+              <div v-if="item.edit" class="w-full flex justify-start items-center">
                 <!-- 普通输入框 -->
-                <el-input
-                  v-if="item.type === 'input'"
-                  v-model.trim="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
-                    placeholder: `请输入${item.formItemAttributes.label ?? ''}`,
-                    clearable: true,
-                    ...item.attributes,
-                  }"
-                >
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                <el-input v-if="item.type === 'input'" v-model.trim="modelValue[item.formItemAttributes.prop]" v-bind="{
+                  placeholder: `请输入${item.formItemAttributes.label ?? ''}`,
+                  clearable: true,
+                  ...item.attributes,
+                }">
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-input>
 
                 <!-- 数字输入框 -->
-                <el-input-number
-                  v-else-if="item.type === 'inputNumber'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
+                <el-input-number v-else-if="item.type === 'inputNumber'"
+                  v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
                     style: 'width:100%;',
                     placeholder: `请输入${item.formItemAttributes.label ?? ''}`,
                     ...item.attributes,
-                  }"
-                >
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                  }">
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-input-number>
 
                 <!-- 标签输入框 -->
-                <el-input-tag
-                  v-else-if="item.type === 'inputTag'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
+                <el-input-tag v-else-if="item.type === 'inputTag'" v-model="modelValue[item.formItemAttributes.prop]"
                   v-bind="{
                     style: 'width:100%',
                     placeholder: `请输入${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     draggable: true,
                     ...item.attributes,
-                  }"
-                >
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                  }">
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-input-tag>
 
                 <!-- 单选框 -->
-                <el-radio-group
-                  v-else-if="item.type === 'radioGroup'"
+                <el-radio-group v-else-if="item.type === 'radioGroup'"
                   v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{ style: 'width:100%', ...item.attributes }"
-                >
-                  <el-radio
-                    v-for="itemOptions in item.options"
-                    :key="itemOptions.value"
-                    :value="itemOptions.value"
-                  >
+                  v-bind="{ style: 'width:100%', ...item.attributes }">
+                  <el-radio v-for="itemOptions in item.options" :key="itemOptions.value" :value="itemOptions.value">
                     {{ itemOptions.label || "-" }}
                   </el-radio>
                 </el-radio-group>
 
                 <!-- 选择框 -->
-                <el-select
-                  v-else-if="item.type === 'select'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
-                    style: 'width:100%',
-                    placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
-                    clearable: true,
-                    ...item.attributes,
-                  }"
-                >
-                  <el-option
-                    v-for="itemOptions in item.options"
-                    :key="itemOptions.value"
-                    :label="itemOptions.label"
-                    :value="itemOptions.value"
-                  />
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                <el-select v-else-if="item.type === 'select'" v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
+                  style: 'width:100%',
+                  placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
+                  clearable: true,
+                  ...item.attributes,
+                }">
+                  <el-option v-for="itemOptions in item.options" :key="itemOptions.value" :label="itemOptions.label"
+                    :value="itemOptions.value" />
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-select>
 
                 <!-- 虚拟化选择框 -->
-                <el-select-v2
-                  v-else-if="item.type === 'selectV2'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
+                <el-select-v2 v-else-if="item.type === 'selectV2'" v-model="modelValue[item.formItemAttributes.prop]"
                   v-bind="{
                     style: 'width:100%',
                     placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     ...item.attributes,
-                  }"
-                >
-                  <el-option
-                    v-for="itemOptions in item.options"
-                    :key="itemOptions.value"
-                    :label="itemOptions.label"
-                    :value="itemOptions.value"
-                  />
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                  }">
+                  <el-option v-for="itemOptions in item.options" :key="itemOptions.value" :label="itemOptions.label"
+                    :value="itemOptions.value" />
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-select-v2>
 
                 <!-- 滑块 -->
-                <el-slider
-                  v-else-if="item.type === 'slider'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{ style: 'width:100%', ...item.attributes }"
-                />
+                <el-slider v-else-if="item.type === 'slider'" v-model="modelValue[item.formItemAttributes.prop]"
+                  v-bind="{ style: 'width:100%', ...item.attributes }" />
 
                 <!-- 开关 -->
-                <el-switch
-                  v-else-if="item.type === 'switch'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{ style: 'width:100%', ...item.attributes }"
-                >
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                <el-switch v-else-if="item.type === 'switch'" v-model="modelValue[item.formItemAttributes.prop]"
+                  v-bind="{ style: 'width:100%', ...item.attributes }">
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-switch>
 
                 <!-- 时间选择器 -->
-                <el-time-picker
-                  v-else-if="item.type === 'timePicker'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
+                <el-time-picker v-else-if="item.type === 'timePicker'"
+                  v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
                     style: 'width:100%',
                     placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     valueFormat: 'HH:mm:ss',
                     ...item.attributes,
-                  }"
-                />
+                  }" />
 
                 <!-- 时间选择 -->
-                <el-time-select
-                  v-else-if="item.type === 'timeSelect'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
+                <el-time-select v-else-if="item.type === 'timeSelect'"
+                  v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
                     style: 'width:100%',
                     placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     ...item.attributes,
-                  }"
-                />
+                  }" />
 
                 <!-- 树形选择 -->
-                <el-tree-select
-                  v-else-if="item.type === 'treeSelect'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
+                <el-tree-select v-else-if="item.type === 'treeSelect'"
+                  v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
                     style: 'width:100%',
                     placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     data: item.options ?? item.attributes?.data ?? [],
                     ...item.attributes,
-                  }"
-                />
+                  }" />
 
                 <!-- 日期时间选择器 -->
-                <el-date-picker
-                  v-else-if="item.type === 'datePicker'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
+                <el-date-picker v-else-if="item.type === 'datePicker'"
+                  v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
                     style: 'width:100%',
                     placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     ...item.attributes,
-                  }"
-                >
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                  }">
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-date-picker>
 
                 <!-- 颜色选择器 -->
-                <el-color-picker
-                  v-else-if="item.type === 'colorPicker'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{
+                <el-color-picker v-else-if="item.type === 'colorPicker'"
+                  v-model="modelValue[item.formItemAttributes.prop]" v-bind="{
                     ...item.attributes,
-                  }"
-                />
+                  }" />
 
                 <!-- 多选框 -->
-                <el-checkbox-group
-                  v-else-if="item.type === 'checkboxGroup'"
+                <el-checkbox-group v-else-if="item.type === 'checkboxGroup'"
                   v-model="modelValue[item.formItemAttributes.prop]"
-                  v-bind="{ style: 'width:100%', ...item.attributes }"
-                >
-                  <el-checkbox
-                    v-for="opt in item.options"
-                    :key="opt.value"
-                    :value="opt.value"
-                  >
+                  v-bind="{ style: 'width:100%', ...item.attributes }">
+                  <el-checkbox v-for="opt in item.options" :key="opt.value" :value="opt.value">
                     {{ opt.label ?? "-" }}
                   </el-checkbox>
                 </el-checkbox-group>
 
                 <!-- 级联选择器 -->
-                <el-cascader
-                  v-else-if="item.type === 'cascader'"
-                  v-model="modelValue[item.formItemAttributes.prop]"
+                <el-cascader v-else-if="item.type === 'cascader'" v-model="modelValue[item.formItemAttributes.prop]"
                   v-bind="{
                     style: 'width:100%',
                     placeholder: `请选择${item.formItemAttributes.label ?? ''}`,
                     clearable: true,
                     options: item.options ?? [],
                     ...item.attributes,
-                  }"
-                >
-                  <template
-                    v-for="elSlotName in item.elSlotNames"
-                    #[elSlotName]="slotProps"
-                  >
-                    <slot
-                      :key="elSlotName"
-                      :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
-                      v-bind="{ ...slotProps }"
-                    >
+                  }">
+                  <template v-for="elSlotName in item.elSlotNames" #[elSlotName]="slotProps">
+                    <slot :key="elSlotName" :name="`${item.formItemAttributes?.prop}-${elSlotName}`"
+                      v-bind="{ ...slotProps }">
                     </slot>
                   </template>
                 </el-cascader>
 
-                <slot
-                  v-else-if="item.type === 'footer'"
-                  name="footerSlot"
-                  v-bind="{ ...item }"
-                >
+                <slot v-else-if="item.type === 'footer'" name="footerSlot" v-bind="{ ...item }">
                   <div class="flex justify-start items-center">
                     <el-button type="primary" @click="handleSubmit">
                       查 询
@@ -539,22 +406,11 @@ defineExpose({
                 <slot v-else v-bind="{ ...item }" :name="item.type"></slot>
 
                 <!-- 展开/收缩图标（仅当 showRowNum >= 1 时展示） -->
-                <span
-                  v-if="showExpandIcon && getItemsToShow.length === index + 1"
-                  :key="'d-form-expand'"
-                  class="d-form-expand-col ml-2"
-                >
+                <span v-if="showExpandIcon && getItemsToShow.length === index + 1" :key="'d-form-expand'"
+                  class="d-form-expand-col ml-2">
                   <slot name="expanded" v-bind="{ isExpanded }">
-                    <el-icon
-                      class="d-form-expand-icon"
-                      :size="20"
-                      @click="toggleExpand"
-                    >
-                      <el-tooltip
-                        effect="dark"
-                        :content="isExpanded ? '收缩' : '展开'"
-                        placement="top"
-                      >
+                    <el-icon class="d-form-expand-icon" :size="20" @click="toggleExpand">
+                      <el-tooltip effect="dark" :content="isExpanded ? '收缩' : '展开'" placement="top">
                         <ArrowDown v-if="!isExpanded" />
                         <ArrowUp v-else />
                       </el-tooltip>
@@ -565,13 +421,9 @@ defineExpose({
 
               <!-- 非编辑时，默认仅显示文字 -->
               <!-- 【单个】非编辑的字段支持自定义，插槽返回所有配置信息 -->
-              <slot
-                v-else-if="
-                  !!$slots?.[`${item.formItemAttributes?.prop}-notEdit`]
-                "
-                :name="`${item.formItemAttributes?.prop}-notEdit`"
-                v-bind="{ ...item }"
-              >
+              <slot v-else-if="
+                !!$slots?.[`${item.formItemAttributes?.prop}-notEdit`]
+              " :name="`${item.formItemAttributes?.prop}-notEdit`" v-bind="{ ...item }">
               </slot>
               <!-- 【全部】非编辑的字段支持自定义，插槽返回所有配置信息 -->
               <slot v-else name="notEdit" v-bind="{ ...item }">

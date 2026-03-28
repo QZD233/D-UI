@@ -64,6 +64,7 @@ export interface IOptions {
   label?: string;
   value?: any;
   text?: string;
+  children?: IOptions[];
 }
 
 /**

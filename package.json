@@ -2,6 +2,24 @@
   "name": "d-ui-monorepo",
   "private": true,
   "type": "module",
+  "version": "0.0.2",
+  "license": "MIT",
+  "homepage": "https://github.com/QZD233/D-UI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QZD233/D-UI",
+    "directory": "packages/d-ui"
+  },
+  "keywords": ["vue", "element-plus", "dynamic-form","vite",
+    "vite-plugin","d-ui","d-form"
+  ],
+  "bugs": {
+    "url": "https://github.com/QZD233/D-UI/issues"
+  },
+  "publishConfig": {
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "packageManager": "pnpm@9.14.2",
   "scripts": {
     "build": "turbo run build",

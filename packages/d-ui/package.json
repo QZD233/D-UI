@@ -1,11 +1,30 @@
 {
   "name": "@d-ui/core",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
-  "description": "Vue 3 组件库，基于 Element Plus 扩展",
+  "description": "Vue 3 组件库，基于 Element Plus 扩展而来的动态表单组件",
   "main": "./dist/d-ui.umd.cjs",
   "module": "./dist/d-ui.js",
   "types": "./dist/index.d.ts",
+  "license": "MIT",
+  "homepage": "https://github.com/QZD233/D-UI",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/QZD233/D-UI",
+    "directory": "packages/d-ui"
+  },
+  "keywords": [
+    "vue",
+    "element-plus",
+    "dynamic-form",
+    "vite",
+    "vite-plugin",
+    "d-ui",
+    "d-form"
+  ],
+  "bugs": {
+    "url": "https://github.com/QZD233/D-UI/issues"
+  },
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
@@ -13,11 +32,11 @@
   "exports": {
     ".": {
       "import": {
-        "types": "./dist/index.d.ts",
+        "types": "./dist/components/DForm/index.d.ts",
         "default": "./dist/d-ui.js"
       },
       "require": {
-        "types": "./dist/index.d.cts",
+        "types": "./dist/components/DForm/index.d.cts",
         "default": "./dist/d-ui.umd.cjs"
       }
     },
@@ -39,22 +58,14 @@
   "peerDependencies": {
     "vue": "^3.5.0",
     "element-plus": "^2.6.0",
-    "@element-plus/icons-vue": "^2.3.0",
-    "pinia": "^2.2.0",
-    "@vueuse/core": "^11.0.0",
-    "axios": "^1.6.0"
+    "@element-plus/icons-vue": "^2.3.0"
   },
-  "dependencies": {
-    "lodash-es": "^4.17.21"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@element-plus/icons-vue": "^2.3.2",
-    "@vueuse/core": "^11.2.0",
-    "axios": "^1.7.0",
     "@tailwindcss/vite": "^4.1.0",
     "@vitejs/plugin-vue": "^5.1.0",
     "element-plus": "^2.6.0",
-    "pinia": "^2.2.0",
     "rimraf": "^5.0.0",
     "sass": "^1.81.0",
     "tailwindcss": "^4.1.0",
@@ -65,7 +76,3 @@
     "vue-tsc": "^2.1.0"
   }
 }
-
-
-
-

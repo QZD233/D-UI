@@ -33,20 +33,14 @@ export default defineConfig({
         "vue",
         "element-plus",
         "@element-plus/icons-vue",
-        "pinia",
-        "lodash-es",
-        "@vueuse/core",
-        "axios",
       ],
       output: {
+        // 入口同时有 default 与 named export 时避免 Rollup 的 UMD/互操作警告
+        exports: "named",
         globals: {
           vue: "Vue",
           "element-plus": "ElementPlus",
           "@element-plus/icons-vue": "ElementPlusIconsVue",
-          pinia: "Pinia",
-          "lodash-es": "_",
-          "@vueuse/core": "VueUse",
-          axios: "axios",
         },
       },
     },

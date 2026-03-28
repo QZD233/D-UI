@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DForm, DHelloWorld } from "@d-ui/core";
+import { DForm } from "@d-ui/core";
 import type { IDFormConfig } from "@d-ui/core";
 import { ref } from "vue";
 
@@ -305,7 +305,6 @@ const reset = () => {
     <h1>D-UI 组件库开发演示</h1>
     <el-divider />
     <div class="flex flex-col items-center justify-center">
-      <DHelloWorld msg="欢迎使用 D-UI" />
       <el-button type="primary">Element Plus 按钮</el-button>
     </div>
     <el-divider content-position="left">DForm 动态表单测试</el-divider>
