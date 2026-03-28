@@ -56,7 +56,7 @@ pnpm build
 
 ### 发布到 npm
 
-1. 在 `packages/d-ui/package.json` 中更新 `name`（如需发布到私有 scope）
+1. 在 `packages/d-ui/package.json` 中更新 `name`
 2. 进入 `packages/d-ui` 执行：
 
 ```bash
@@ -82,14 +82,14 @@ app.use(DUI);
 
 ```vue
 <template>
-  <DHelloWorld msg="Hello" />
+  <DForm ... />
 </template>
 ```
 
 或按需导入：
 
 ```ts
-import { HelloWorld } from "@d-ui/core";
+import { DForm } from "@d-ui/core";
 ```
 
 ## 添加新组件
